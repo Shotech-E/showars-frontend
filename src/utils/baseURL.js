@@ -1,3 +1,3 @@
 export const getBaseUrl = () => {
-    return "https://showars-backend-sult.vercel.app/";
+    return "http://localhost:5000";
 }

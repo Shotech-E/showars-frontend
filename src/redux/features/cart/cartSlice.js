@@ -21,7 +21,7 @@ const cartSlice = createSlice({
       if (!isExist) {
         state.products.push({ ...action.payload, quantity: 1 });
       } else {
-        console.log("Items already exist");
+        alert("Items already exist");
       }
 
       state.selectedItems = setSelectedItems(state);

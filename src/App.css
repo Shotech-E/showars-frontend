@@ -81,6 +81,12 @@ nav {
 }
 
 .nav__links {
+  transition: max-height 0.3s ease-in-out;
+  overflow: hidden;
+}
+
+
+.nav__links {
   flex: 1;
   list-style: none;
   display: flex;

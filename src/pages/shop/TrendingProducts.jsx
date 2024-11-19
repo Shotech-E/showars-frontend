@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react'
 import ProductCards from './ProductCards'
-
 import products from '../../data/products.json'
 
 const TrendingProducts = () => {

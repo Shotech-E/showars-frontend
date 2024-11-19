@@ -10,6 +10,7 @@ import { addToCart } from '../../redux/features/cart/cartSlice';
 const ProductCards = ({ products }) => {
     const dispatch = useDispatch();
 
+
     const handleAddToCart = (product) => {
         dispatch(addToCart(product));        
     }
