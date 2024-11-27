@@ -1,14 +1,23 @@
-/* eslint-disable no-unused-vars */
-import React, { useState } from 'react'
-import ProductCards from './ProductCards'
-import products from '../../data/products.json'
+import { useState } from "react";
+import ProductCards from "./ProductCards";
+import { useFetchAllProductsQuery } from "../../redux/features/products/productsApi";
 
 const TrendingProducts = () => {
-    const [visibleProducts, setVisibleProducts] = useState(8);
+  const [visibleProducts, setVisibleProducts] = useState(8);
 
-    const loadMoreProducts = () => {
-        setVisibleProducts(prevCount => prevCount + 4 )
-    }
+  // Pass default query parameters
+  const { data, isLoading, error } = useFetchAllProductsQuery({});
+
+  // Use fallback value for products if data is null or undefined
+  const products = data?.products || [];
+
+  if (isLoading) return <h1 className="text-center">Loading...</h1>;
+  if (error) return <h1 className="text-center">Error loading products</h1>;
+
+  const loadMoreProducts = () => {
+    setVisibleProducts((prevCount) => prevCount + 4);
+  };
+
   return (
     <section className="section__container product__container">
       <h2 className="section__header">Trending Products</h2>
@@ -17,26 +26,26 @@ const TrendingProducts = () => {
         nemo totam, unde temporibus animi dolore delectus reprehenderit in atque
         consequatur ab saepe aliquid at perspiciatis ad adipisci natus? Quo.
       </p>
-        {/* Product Card */}
-      <div className='mt-12'> 
-        <ProductCards products={products.slice(0, visibleProducts)} />
-      </div>
-      
-      {/* Load More Products  Button */}
-      <div className='product__btn'>
-        {visibleProducts < products.length && (
-          <div className="flex justify-center mt-4">
-            <button
-              onClick={loadMoreProducts}
-              className="btn"
-            >
-              Load More
-            </button>
-          </div>
+
+      {/* Product Cards */}
+      <div className="mt-12">
+        {products.length ? (
+          <ProductCards products={products.slice(0, visibleProducts)} />
+        ) : (
+          <p>No products available.</p>
         )}
       </div>
+
+      {/* Load More Button */}
+      {visibleProducts < products.length && (
+        <div className="product__btn flex justify-center mt-4">
+          <button onClick={loadMoreProducts} className="btn">
+            Load More
+          </button>
+        </div>
+      )}
     </section>
   );
-}
+};
 
-export default TrendingProducts
+export default TrendingProducts;

@@ -10,8 +10,10 @@ const Navbar = () => {
   const products = useSelector((state) => state.cart.products);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isPagesDropdownOpen, setIsPagesDropdownOpen] = useState(false); // New state for Pages dropdown
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const dropdownRef = useRef();
+  const pagesDropdownRef = useRef(); // Ref for Pages dropdown
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const [logoutUser] = useLogoutUserMutation();
@@ -34,7 +36,7 @@ const Navbar = () => {
     ];
   };
 
-  const dropdownMenu = getDropdownMenu(user?.role);
+  const dropdownMenu = user ? getDropdownMenu(user?.role) : [];
 
   const handleLogout = async () => {
     try {
@@ -50,6 +52,12 @@ const Navbar = () => {
     const handleOutsideClick = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setIsDropdownOpen(false);
+      }
+      if (
+        pagesDropdownRef.current &&
+        !pagesDropdownRef.current.contains(e.target)
+      ) {
+        setIsPagesDropdownOpen(false);
       }
     };
     document.addEventListener("mousedown", handleOutsideClick);
@@ -92,10 +100,33 @@ const Navbar = () => {
               Shop
             </Link>
           </li>
-          <li className="py-2 px-4 lg:py-0">
-            <Link to="/pages" className="hover:text-primary">
+          <li
+            className="relative py-2 px-4 lg:py-0 cursor-pointer"
+            ref={pagesDropdownRef}
+          >
+            <div
+              onClick={() => setIsPagesDropdownOpen(!isPagesDropdownOpen)}
+              className="hover:text-primary flex items-center"
+            >
               Pages
-            </Link>
+              <i className="ri-arrow-down-s-line ml-1"></i>
+            </div>
+            {isPagesDropdownOpen && (
+              <ul className="absolute top-10 left-0 bg-white shadow-md rounded-lg w-40">
+                <li className="px-4 py-2 hover:bg-gray-100">
+                  <Link to="/categories/cosmetics">Cosmetics</Link>
+                </li>
+                <li className="px-4 py-2 hover:bg-gray-100">
+                  <Link to="/categories/jewelry">Jewelry</Link>
+                </li>
+                <li className="px-4 py-2 hover:bg-gray-100">
+                  <Link to="/categories/dress">Dress</Link>
+                </li>
+                <li className="px-4 py-2 hover:bg-gray-100">
+                  <Link to="/categories/accessories">Accessories</Link>
+                </li>
+              </ul>
+            )}
           </li>
           <li className="py-2 px-4 lg:py-0">
             <Link to="/contact" className="hover:text-primary">

@@ -68,6 +68,22 @@ const authApi = createApi({
       }),
       invalidatesTags: ["User"],
     }),
+// New Endpoints
+    requestPasswordReset: builder.mutation({
+      query: (email) => ({
+        url: "/forgot-password",
+        method: "POST",
+        body: { email },
+      }),
+    }),
+
+    resetPassword: builder.mutation({
+      query: ({ token, newPassword }) => ({
+        url: `/reset-password/${token}`,
+        method: "POST",
+        body: { password: newPassword },
+      }),
+    }),
   }),
 });
 
@@ -79,5 +95,7 @@ export const {
   useUpdateUserRoleMutation,
   useDeleteUserMutation,
   useEditProfileMutation,
+  useRequestPasswordResetMutation, // Hook for requesting password reset
+  useResetPasswordMutation // Hook for resetting password
 } = authApi;
 export default authApi;

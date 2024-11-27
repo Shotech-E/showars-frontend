@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import ProductCards from "../shop/ProductCards";
 import ShopFiltering from "./ShopFiltering";
 import { useFetchAllProductsQuery } from "../../redux/features/products/productsApi";

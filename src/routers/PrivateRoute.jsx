@@ -1,7 +1,8 @@
+import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 import { Navigate, useLocation } from "react-router-dom";
 
-const PrivateRoute = ({children, role}) => {
+const PrivateRoute = ({ children, role }) => {
   const { user } = useSelector((state) => state.auth);
   const location = useLocation();
 
@@ -15,6 +16,12 @@ const PrivateRoute = ({children, role}) => {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
   return children;
+};
+
+// PropTypes validation
+PrivateRoute.propTypes = {
+  children: PropTypes.node.isRequired,
+  role: PropTypes.string,
 };
 
 export default PrivateRoute;

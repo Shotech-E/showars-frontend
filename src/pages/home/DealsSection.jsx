@@ -1,14 +1,13 @@
-/* eslint-disable no-unused-vars */
-import React from 'react'
+import CountdownTimer from "../../components/CountdownTimer";
 import dealsImg from '../../assets/deals.png'
 
 const DealsSection = () => {
+  const countdownEndDate = "2024-11-31T23:59:59"; // Replace with your target date/time
   return (
     <section className="section__container deals__container">
       <div className="deals__image">
         <img src={dealsImg} alt="Deals Image" />
       </div>
-
       <div className="deals__content">
         <h5 className="capitalize">Get up to 20% Discount</h5>
         <h4 className="capitalize">Deals of the Month</h4>
@@ -19,22 +18,8 @@ const DealsSection = () => {
           voluptate sunt incidunt?
         </p>
         <div className="deals__countdown flex-wrap">
-          <div className="deals__countdown__card">
-            <h4>14</h4>
-            <p>Days</p>
-          </div>
-          <div className="deals__countdown__card">
-            <h4>20</h4>
-            <p>Hours</p>
-          </div>
-          <div className="deals__countdown__card">
-            <h4>15</h4>
-            <p>Mins</p>
-          </div>
-          <div className="deals__countdown__card">
-            <h4>05</h4>
-            <p>Secs</p>
-          </div>
+          
+            <CountdownTimer endDate={countdownEndDate} />
         </div>
       </div>
     </section>

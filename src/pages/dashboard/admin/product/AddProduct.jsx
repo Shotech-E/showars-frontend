@@ -12,7 +12,7 @@ const categories = [
   { label: "Select Category", value: "" },
   { label: "Accessories", value: "accessories" },
   { label: "Dress", value: "dress" },
-  { label: "Jewellery", value: "jewellery" },
+  { label: "Jewelry", value: "jewelry" },
   { label: "Cosmetics", value: "cosmetics" },
 ];
 

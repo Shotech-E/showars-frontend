@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/jsx-key */
-import React from 'react'
 
 import category1 from '../../assets/category-1.jpg'
 import category2 from '../../assets/category-2.jpg'

@@ -1,36 +1,40 @@
-/* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-
-import products from "../../data/products.json";
+import { useFetchAllProductsQuery } from "../../redux/features/products/productsApi";
 import ProductCards from "../shop/ProductCards";
 
 const CategoryPage = () => {
   const { categoryName } = useParams();
+
+  // Call the API with categoryName as the filter
+  const { data, isLoading, error } = useFetchAllProductsQuery({
+    category: categoryName.toLowerCase(),
+  });
+
   const [filteredProducts, setFilteredProducts] = useState([]);
 
   useEffect(() => {
-    const filtered = products.filter(
-      (product) => product.category === categoryName.toLowerCase()
-    );
-    setFilteredProducts(filtered);
-  }, [categoryName]);
-    useEffect(() => {
-        window.scrollTo(0, 0)
-    })
+    if (data && data.products) {
+      setFilteredProducts(data.products); // Directly use fetched products
+    }
+  }, [data]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <p>Error fetching products: {error.message}</p>;
+
   return (
     <>
       <section className="section__container bg-primary-light">
         <h2 className="section__header capitalize">{categoryName}</h2>
         <p className="section__subheader">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime quas
-          accusantium quod iure repellat, nemo numquam ex exercitationem, ullam
-          id officiis accusamus minus facilis similique magnam architecto
-          molestiae, soluta obcaecati!
+          Browse products in the {categoryName} category.
         </p>
       </section>
 
-      {/* Product Cards */}
       <div className="section__container">
         <ProductCards products={filteredProducts} />
       </div>

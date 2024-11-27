@@ -25,7 +25,7 @@ const Login = () => {
       // console.log(response);
       const { token, user } = response;
       dispatch(setUser ({ user }));
-      alert("Login successful");
+      setMessage("Login successful");
       navigate("/");
     } catch (error) {
       setMessage("Please provide email and password");
