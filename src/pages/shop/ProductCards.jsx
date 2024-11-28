@@ -32,7 +32,7 @@ const ProductCards = ({ products }) => {
                   handleAddToCart(product);
                 }}
               >
-                <i className="ri-shopping-cart-line bg-primary p-1.5 text-white hover:bg-primary-dark hover:text-white"></i>
+                <i className="ri-add-box-line bg-primary p-1.5 text-white hover:bg-primary-dark hover:text-white" title='Add to cart'></i>
               </button>
             </div>
           </div>
