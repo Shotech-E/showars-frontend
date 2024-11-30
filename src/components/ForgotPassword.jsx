@@ -23,7 +23,7 @@ const ForgotPassword = () => {
             type="email"
             placeholder="Enter your email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.Value.toLowerCase())}
             required
             className="w-full bg-gray-100 focus:outline-none py-3 px-5  hover:bg-gray-200"
           />
