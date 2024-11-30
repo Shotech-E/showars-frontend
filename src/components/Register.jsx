@@ -54,7 +54,7 @@ const Register = () => {
             type="email"
             name="email"
             id="email"
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.Value.toLowerCase())}
             placeholder="Email Address"
             required
             className="w-full bg-gray-100 focus:outline-none py-3 px-5  hover:bg-gray-200"
