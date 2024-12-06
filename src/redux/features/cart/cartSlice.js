@@ -1,6 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
+// Helper function to load cart from localStorage
+const loadCartFromLocalStorage = () => {
+  const cart = localStorage.getItem("cart");
+  return cart ? JSON.parse(cart) : undefined; // Return parsed cart or undefined if not found
+};
+
+// Set the initial state from localStorage if available
+const initialState = loadCartFromLocalStorage() || {
   products: [],
   selectedItems: 0,
   totalPrice: 0,
@@ -21,13 +28,16 @@ const cartSlice = createSlice({
       if (!isExist) {
         state.products.push({ ...action.payload, quantity: 1 });
       } else {
-        alert("Item already exist");
+        alert("Item already exists");
       }
 
       state.selectedItems = setSelectedItems(state);
       state.totalPrice = setTotalPrice(state);
       state.tax = setTax(state);
       state.grandTotal = setGrandTotal(state);
+
+      // Save to localStorage
+      localStorage.setItem("cart", JSON.stringify(state));
     },
 
     updateQuantity: (state, action) => {
@@ -38,18 +48,22 @@ const cartSlice = createSlice({
           } else if (action.payload.type === "dec") {
             if (product.quantity > 1) {
               product.quantity -= 1;
-            } 
+            }
           }
         }
         return product;
       });
 
-        state.products = products;
-        state.selectedItems = setSelectedItems(state);
-        state.totalPrice = setTotalPrice(state);
-        state.tax = setTax(state);
-        state.grandTotal = setGrandTotal(state);
+      state.products = products;
+      state.selectedItems = setSelectedItems(state);
+      state.totalPrice = setTotalPrice(state);
+      state.tax = setTax(state);
+      state.grandTotal = setGrandTotal(state);
+
+      // Save to localStorage
+      localStorage.setItem("cart", JSON.stringify(state));
     },
+
     removeFromCart: (state, action) => {
       state.products = state.products.filter(
         (product) => product._id !== action.payload.id
@@ -58,33 +72,37 @@ const cartSlice = createSlice({
       state.totalPrice = setTotalPrice(state);
       state.tax = setTax(state);
       state.grandTotal = setGrandTotal(state);
+
+      // Save to localStorage
+      localStorage.setItem("cart", JSON.stringify(state));
     },
+
     clearCart: (state) => {
       state.products = [];
       state.selectedItems = 0;
       state.totalPrice = 0;
       state.tax = 0;
       state.grandTotal = 0;
-    }
+
+      // Remove from localStorage
+      localStorage.removeItem("cart");
+    },
   },
 });
 
-// Utilities function
+// Utility functions for calculating the cart values
 export const setSelectedItems = (state) =>
-  state.products.reduce((total, product) => {
-    return Number(total + product.quantity);
-  }, 0);
+  state.products.reduce((total, product) => total + product.quantity, 0);
 
 export const setTotalPrice = (state) =>
-  state.products.reduce((total, product) => {
-    return Number(total + product.quantity * product.price);
-  }, 0);
+  state.products.reduce(
+    (total, product) => total + product.quantity * product.price,
+    0
+  );
 
-export const setTax = (state) => Number(setTotalPrice(state) * state.taxRate);
+export const setTax = (state) => setTotalPrice(state) * state.taxRate;
 
-export const setGrandTotal = (state) => {
-  return setTotalPrice(state) + setTotalPrice(state) * state.taxRate;
-};
+export const setGrandTotal = (state) => setTotalPrice(state) + setTax(state);
 
 export const { addToCart, updateQuantity, removeFromCart, clearCart } =
   cartSlice.actions;
