@@ -2,10 +2,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { clearCart } from "../../redux/features/cart/cartSlice";
 import { getBaseUrl } from "../../utils/baseURL";
 import { loadStripe } from "@stripe/stripe-js";
+import { useNavigate } from "react-router-dom"; // To navigate to the login page if needed
 
 const OrderSummary = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth); // User state
   const products = useSelector((state) => state.cart.products);
   const { selectedItems, totalPrice, tax, taxRate, grandTotal } = useSelector(
     (state) => state.cart
@@ -16,50 +18,57 @@ const OrderSummary = () => {
   };
 
   const makePayment = async () => {
-  try {
-    const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PK);
-
-    if (!stripe) {
-      console.error("Stripe initialization failed!");
+    if (!user) {
+      // User is not logged in, redirect to login page
+      alert("Please log in to proceed with the payment.");
+      navigate("/login"); // Redirect to the login page (modify the path if needed)
       return;
     }
 
-    const body = {
-      products,
-      userId: user?._id,
-    };
+    try {
+      const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PK);
 
-    const response = await fetch(
-      `${getBaseUrl()}/api/orders/create-checkout-session`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
+      if (!stripe) {
+        console.error("Stripe initialization failed!");
+        return;
       }
-    );
 
-    if (!response.ok) {
-      throw new Error("Failed to create checkout session");
+      const body = {
+        products,
+        userId: user?._id,
+      };
+
+      const response = await fetch(
+        `${getBaseUrl()}/api/orders/create-checkout-session`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to create checkout session");
+      }
+
+      const session = await response.json();
+
+      const result = await stripe.redirectToCheckout({
+        sessionId: session.id,
+      });
+
+      if (result.error) {
+        console.error("Stripe Checkout Error:", result.error.message);
+      } else {
+        // Payment succeeded, clear the cart
+        dispatch(clearCart());
+      }
+    } catch (error) {
+      console.error("Payment Error:", error.message);
     }
-
-    const session = await response.json();
-
-    const result = await stripe.redirectToCheckout({
-      sessionId: session.id,
-    });
-
-    if (result.error) {
-      console.error("Stripe Checkout Error:", result.error.message);
-    } else {
-      // Payment succeeded, clear the cart
-      dispatch(clearCart());
-    }
-  } catch (error) {
-    console.error("Payment Error:", error.message);
-  }
-};
+  };
 
   return (
     <div className="bg-gray-100 mt-5 rounded-lg text-base shadow-md">
