@@ -11,6 +11,7 @@ import Contact from "../components/Contact";
 import ForgotPassword from "../components/ForgotPassword"; // Forgot Password Page
 import ResetPassword from "../components/ResetPassword"; // Reset Password Page
 import PaymentSuccess from "../components/PaymentSuccess";
+import Cancel from "../components/Cancel";
 import TimelineStep from "../components/TimelineStep";
 import DashboardLayout from "../pages/dashboard/DashboardLayout";
 import PrivateRoute from "../routers/PrivateRoute";
@@ -56,6 +57,10 @@ const Router = createBrowserRouter([
       {
         path: "/success",
         element: <PaymentSuccess />,
+      },
+      {
+        path: "/cancel",
+        element: <Cancel />,
       },
       {
         path: "/order/:orderId",
