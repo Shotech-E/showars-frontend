@@ -100,17 +100,22 @@ const ShopPage = () => {
               >
                 Prev
               </button>
-              {[...Array(totalPages)].map((_, index) => (
-                <button
-                  className={`btn btn-secondary px-4 py-2 mr-2 rounded-md ${
-                    currentPage === index + 1 ? "bg-primary text-white" : ""
-                  }`}
-                  key={index}
-                  onClick={() => handlePageChange(index + 1)}
-                >
-                  {index + 1}
-                </button>
-              ))}
+              {[...Array(totalPages)].map((_, index) => {
+                const pageNumber = index + 1; // Calculate the page number
+                return (
+                  <button
+                    key={index}
+                    className={`btn-secondary px-4 py-2 mr-2 rounded-md ${
+                      currentPage === pageNumber
+                        ? "bg-gray-500 text-white"
+                        : "bg-red-500"
+                    }`}
+                    onClick={() => handlePageChange(pageNumber)}
+                  >
+                    {pageNumber}
+                  </button>
+                );
+              })}
               <button
                 className="btn btn-secondary px-4 py-2 rounded-md ml-2"
                 onClick={() => handlePageChange(currentPage + 1)}
